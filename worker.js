@@ -8,7 +8,7 @@ var NODE_RULE = {
   prepare: 'npm install',
   test: 'npm test',
   start: 'npm start',
-  path: path.join(__dirname, '../node_modules/npm/bin')
+  path: path.join(__dirname, './node_modules/npm/bin')
 }
 
 
