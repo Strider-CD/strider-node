@@ -11,5 +11,8 @@
     "node"
   ],
   "author": "Peter Braden",
-  "license": "BSD"
+  "license": "BSD",
+  "strider": {
+    "worker": "worker.js"
+  }
 }
