@@ -1,4 +1,5 @@
 var gumshoe = require('gumshoe')
+  , path = require('path')
 
 var NODE_RULE = {
   filename: 'package.json',
@@ -22,5 +23,6 @@ module.exports = function(ctx, cb){
     test: doTest
   })
 
+  cb(null)
 }
 
