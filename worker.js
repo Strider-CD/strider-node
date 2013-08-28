@@ -1,46 +1,32 @@
-var gumshoe = require('gumshoe')
-  , path = require('path')
+var path = require('path')
 
-var NODE_RULE = {
-  filename: 'package.json',
-  exists: true,
-  language: 'node.js',
-  framework: null,
-  prepare: 'npm install',
-  test: 'npm test',
-  start: 'npm start',
-  path: path.join(__dirname, '../node_modules/npm/bin')
-}
-
-
-module.exports = function(ctx, cb){
-
-  function runCmd(ctx, cmd, cb) {
-    gumshoe.run(ctx.workingDir, [NODE_RULE], function(err, res) {
-      if (err) return cb(0)
-      var psh = ctx.shellWrap(cmd)
-      ctx.forkProc(ctx.workingDir, psh.cmd, psh.args, function(code) {
-        return cb(code)
-      })
-    })
+module.exports = {
+  // an object that defines the schema for configuration
+  config: null,
+  // Initialize the plugin for a job
+  //   config:     taken from DB config extended by flat file config
+  //   job & repo: see strider-runner-core
+  //   cb(err, initialized plugin)
+  init: function (config, job, repo, cb) {
+    cb(null, {
+      // string or list - to be added to the PATH
+      path: path.join(__dirname, '../node_modules/npm/bin'),
+      // any extra env variables
+      env: {},
+      // For each phase that you want to deal with, provide either a shell
+      // string or fn(context, done)
+      prepare: 'npm install',
+      test: 'npm test',
+      cleanup: 'rm -rf node_modules'
+    });
+  },
+  // if provided, autodetect is run if the project has *no* plugin
+  // configuration at all.
+  gumshoe: {
+    filename: 'package.json',
+    exists: true,
+    language: 'node.js',
+    framework: null
   }
-
-  var doTest = function(ctx , cb){
-    runCmd(ctx, NODE_RULE.test, cb)
-  }
-
-  var doPrepare  = function(ctx, cb) {
-    runCmd(ctx, NODE_RULE.prepare, cb)
-  }
-
- 
-  ctx.addBuildHook({
-    test: doTest,
-    prepare: doPrepare,
-  })
-
-  console.log("strider-node worker extension loaded")
-
-  cb(null)
 }
 
