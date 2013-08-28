@@ -15,13 +15,31 @@ var NODE_RULE = {
 
 module.exports = function(ctx, cb){
 
-  var doTest = function(ctx , cb){
-    gumshoe.run(ctx.workingDir, [NODE_RULE], cb) 
+  function runCmd(ctx, cmd, cb) {
+    gumshoe.run(ctx.workingDir, [NODE_RULE], function(err, res) {
+      if (err) return cb(0)
+      var psh = ctx.shellWrap(cmd)
+      ctx.forkProc(ctx.workingDir, psh.cmd, psh.args, function(code) {
+        return cb(code)
+      })
+    })
   }
+
+  var doTest = function(ctx , cb){
+    runCmd(ctx, NODE_RULE.test, cb)
+  }
+
+  var doPrepare  = function(ctx, cb) {
+    runCmd(ctx, NODE_RULE.prepare, cb)
+  }
+
  
   ctx.addBuildHook({
-    test: doTest
+    test: doTest,
+    prepare: doPrepare,
   })
+
+  console.log("strider-node worker extension loaded")
 
   cb(null)
 }
