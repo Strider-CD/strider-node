@@ -1,7 +1,8 @@
+var detect = require('strider-detection-rules')
 var gumshoe = require('gumshoe')
-  , path = require('path')
+var path = require('path')
 
-var NODE_RULE = {
+var NODE_RULES = [{
   filename: 'package.json',
   exists: true,
   language: 'node.js',
@@ -10,27 +11,17 @@ var NODE_RULE = {
   test: 'npm test',
   start: 'npm start',
   path: path.join(__dirname, '../node_modules/npm/bin')
-}
+}]
 
 
 module.exports = function(ctx, cb){
 
-  function runCmd(ctx, cmd, cb) {
-    gumshoe.run(ctx.workingDir, [NODE_RULE], function(err, res) {
-      if (err) return cb(0)
-      var psh = ctx.shellWrap(cmd)
-      ctx.forkProc(ctx.workingDir, psh.cmd, psh.args, function(code) {
-        return cb(code)
-      })
-    })
-  }
-
   var doTest = function(ctx , cb){
-    runCmd(ctx, NODE_RULE.test, cb)
+    detect(NODE_RULES, "test", ctx, cb)
   }
 
   var doPrepare  = function(ctx, cb) {
-    runCmd(ctx, NODE_RULE.prepare, cb)
+    detect(NODE_RULES, "prepare", ctx, cb)
   }
 
  
