@@ -10,7 +10,6 @@ var NODE_RULES = [{
   prepare: 'npm install --force',
   test: 'npm test',
   start: 'npm start',
-  path: path.join(__dirname, '../node_modules/npm/bin')
 }]
 
 
