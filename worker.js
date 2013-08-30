@@ -7,9 +7,9 @@ var NODE_RULES = [{
   exists: true,
   language: 'node.js',
   framework: null,
-  prepare: 'npm install --force',
-  test: 'npm test',
-  start: 'npm start',
+  prepare: 'npm install --force --color always',
+  test: 'npm test --color always',
+  start: 'npm start --color always',
 }]
 
 
