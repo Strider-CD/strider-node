@@ -1,5 +1,4 @@
 var detect = require('strider-detection-rules')
-var gumshoe = require('gumshoe')
 var path = require('path')
 
 var NODE_RULES = [{
