@@ -7,7 +7,7 @@ var NODE_RULES = [{
   exists: true,
   language: 'node.js',
   framework: null,
-  prepare: 'npm install',
+  prepare: 'npm install --force',
   test: 'npm test',
   start: 'npm start',
   path: path.join(__dirname, '../node_modules/npm/bin')
