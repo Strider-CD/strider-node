@@ -16,6 +16,12 @@
   "author": "Peter Braden",
   "license": "BSD",
   "strider": {
-    "worker": "worker.js"
+    "id": "node",
+    "type": "job",
+    "title": "Node",
+    "webapp": "webapp.js",
+    "worker": "worker.js",
+    "icon": "icon.png",
+    "config": true
   }
 }
