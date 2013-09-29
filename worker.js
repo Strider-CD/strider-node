@@ -1,4 +1,5 @@
 var path = require('path')
+  , fs = require('fs')
 
 module.exports = {
   // Initialize the plugin for a job
@@ -9,12 +10,18 @@ module.exports = {
   init: function (userConfig, config, job, context, cb) {
     config = config || {}
     var ret = {
-      // any extra env variables
-      env: {},
+      env: {
+        MOCHA_COLORS: 1
+      },
       path: [path.join(__dirname, 'node_modules/.bin')],
-      // For each phase that you want to deal with, provide either a shell
-      // string or fn(context, done)
-      prepare: 'npm install',
+      prepare: function (context, done) {
+        if (fs.existsSync(path.join(context.dataDir, 'package.json'))) {
+          return context.cmd('npm install --color=always --force', function (err) {
+            done(err, true)
+          })
+        }
+        done(null, false)
+      },
       cleanup: 'rm -rf node_modules'
     }
     if (config.test && config.test !== '<none>') {
