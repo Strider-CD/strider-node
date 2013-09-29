@@ -1,0 +1,17 @@
+<select ng-model="config.test">
+  <option value="npm test">npm test</option>
+  <option value="make test">make test</option>
+  <option value="<none>">No test command</option>
+</select>
+<p class="help-text">
+  Select which command should be used to test your
+  project. Alternatively, select "No test command" if you are going to
+  test using some other plugin.
+</p>
+<select ng-model="config.runtime" ng-options="value for value in ['0.6', '0.8', '0.10', '0.11', 'stable', 'latest', 'whatever']">
+</select>
+<p class="help-text">
+  Select <em>whatever</em> if you want to just use whatever version of
+  node is on your machine.
+</p>
+<button class="btn btn-primary" ng-click="save()">Save</button>
