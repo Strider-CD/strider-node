@@ -25,7 +25,7 @@ module.exports = {
       cleanup: 'rm -rf node_modules'
     }
     if (config.test && config.test !== '<none>') {
-      ret.test = 'npm test'
+      ret.test = config.test
     }
     if (config.runtime && config.runtime !== 'whatever') {
       ret.env.N_PREFIX = path.join(context.baseDir, '.n')

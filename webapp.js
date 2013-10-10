@@ -7,7 +7,7 @@ module.exports = {
       enum: ['0.6', '0.8', '0.10', '0.11', 'stable', 'latest', 'whatever'],
       default: 'whatever'
     },
-    test: { type: Boolean, default: true }
+    test: { type: String, default: 'npm test' }
   },
   /** This is where we'd fire off extra builds
   listen: function (io) {
