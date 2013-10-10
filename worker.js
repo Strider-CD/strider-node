@@ -3,11 +3,10 @@ var path = require('path')
 
 module.exports = {
   // Initialize the plugin for a job
-  //   userConfig: taken from the user.jobplugins[pluginid] object
   //   config:     taken from DB config extended by flat file config
   //   job & repo: see strider-runner-core
   //   cb(err, initialized plugin)
-  init: function (userConfig, config, job, context, cb) {
+  init: function (config, job, context, cb) {
     config = config || {}
     var ret = {
       env: {
