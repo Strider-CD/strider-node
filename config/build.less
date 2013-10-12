@@ -1,0 +1,13 @@
+@import "strider-colors";
+
+.status-node {
+  background-color: @strider-bg-running;
+
+  &.passed {
+    background-color: @strider-bg-passed;
+  }
+
+  &.failed {
+    background-color: @strider-bg-failed;
+  }
+}

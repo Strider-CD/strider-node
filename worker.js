@@ -15,6 +15,7 @@ module.exports = {
       path: [path.join(__dirname, 'node_modules/.bin')],
       prepare: function (context, done) {
         if (fs.existsSync(path.join(context.dataDir, 'package.json'))) {
+          context.data({doTest: true}, 'extend')
           return context.cmd('npm install --color=always --force', function (err) {
             done(err, true)
           })

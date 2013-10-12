@@ -24,6 +24,14 @@
     "webapp": "webapp.js",
     "worker": "worker.js",
     "icon": "icon.png",
-    "config": true
+    "config": true,
+    "build-status": {
+      "style": "config/build.less",
+      "template": "config/build.html",
+      "attrs": {
+        "ng-show": "data.doTest",
+        "class": "[[ data.testCmd ]]"
+      }
+    }
   }
 }
