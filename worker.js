@@ -1,5 +1,76 @@
 var path = require('path')
   , fs = require('fs')
+  , spawn = require('child_process').spawn
+
+  , async = require('async')
+  , md5 = require('MD5')
+  , mkdirp = require('mkdirp')
+
+function cpDir(from, to, done) {
+  spawn('rm', ['-rf', to]).on('close', function () {
+    mkdirp(path.dirname(to), function () {
+      var out = ''
+        , child = spawn('cp', ['-R', from, to])
+      child.stdout.on('data', function (data) {
+        out += data.toString()
+      })
+      child.stderr.on('data', function (data) {
+        out += data.toString()
+      })
+      child.on('close', function (exitCode) {
+        return done(exitCode && new Error('Failed to copy directory: ' + out + ' ' + exitCode))
+      })
+    })
+  })
+}
+
+function installPackages(context, cachedir, datadir, policy, update, done) {
+  function install() {
+    context.cmd('npm install --color=always', done)
+  }
+  if (policy !== 'strict' && policy !== 'loose') return install()
+  fs.readFile(path.join(datadir, 'package.json'), 'utf8', function (err, packagejson) {
+    if (err) return done()
+    var hash = md5(packagejson)
+      , hashdir = path.join(cachedir, 'node/modules', hash)
+    fs.exists(hashdir, function (exists) {
+      if (exists) {
+        context.comment('restored node_modules from cache')
+        return cpDir(hashdir, path.join(datadir, 'node_modules'), function (err) {
+          if (err) return done(err)
+          if (!update) return done(null, true)
+          context.cmd('npm update --color=always', done)
+        })
+      }
+      if (policy === 'strict') return install()
+      var branchdir = path.join(cachedir, 'node/modules', context.branch)
+      fs.exists(branchdir, function (exists) {
+        if (!exists) return install()
+        context.comment('restoring node_modules from cache')
+        cpDir(hashdir, path.join(datadir, 'node_modules'), function () {
+          context.cmd('npm prune', function (err) {
+            if (err) return done(err)
+            context.cmd('npm update', done)
+          })
+        })
+      })
+    })
+  })
+}
+
+function updateCache(context, cachedir, datadir, done) {
+  fs.readFile(path.join(datadir, 'package.json'), 'utf8', function (err, packagejson) {
+    if (err) return done()
+    var hash = md5(packagejson)
+      , hashdir = path.join(cachedir, 'node/modules', hash)
+      , nmdir = path.join(datadir, 'node_modules')
+    context.comment('saved node_modules to cache')
+    async.series([
+      cpDir.bind(null, nmdir, hashdir),
+      cpDir.bind(null, nmdir, path.join(cachedir, 'node/modules', context.branch))
+    ], done)
+  })
+}
 
 module.exports = {
   // Initialize the plugin for a job
@@ -16,13 +87,17 @@ module.exports = {
       prepare: function (context, done) {
         if (fs.existsSync(path.join(context.dataDir, 'package.json'))) {
           context.data({doTest: true}, 'extend')
-          return context.cmd('npm install --color=always --force', function (err) {
-            done(err, true)
+          return installPackages(context, context.cacheDir, context.dataDir, config.caching, config.update_cache, function (err, exact) {
+            if (err) return done(err)
+            if (exact) return done(err, true)
+            updateCache(context, context.cacheDir, context.dataDir, function (err) {
+              done(err, true)
+            })
           })
         }
         done(null, false)
       },
-      cleanup: 'rm -rf node_modules'
+      // cleanup: 'rm -rf node_modules'
     }
     if (config.test && config.test !== '<none>') {
       ret.test = typeof(config.test) !== 'string' ? 'npm test' : config.test
