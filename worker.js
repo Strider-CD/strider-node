@@ -24,50 +24,54 @@ function cpDir(from, to, done) {
   })
 }
 
-function installPackages(context, cachedir, datadir, policy, update, done) {
+function packageHash(dir, done) {
+  fs.readFile(path.join(dir, 'package.json'), 'utf8', function (err, packagejson) {
+    if (err) return done(err)
+    var hash = md5(packagejson)
+    done(null, hash)
+  })
+}
+
+function installPackages(context, cachier, datadir, policy, update, done) {
   function install() {
     context.cmd('npm install --color=always', done)
   }
   if (policy !== 'strict' && policy !== 'loose') return install()
-  fs.readFile(path.join(datadir, 'package.json'), 'utf8', function (err, packagejson) {
+  // hash the package.json
+  packageHash(datadir, function (err, hash) {
     if (err) return done()
-    var hash = md5(packagejson)
-      , hashdir = path.join(cachedir, 'node/modules', hash)
-    fs.exists(hashdir, function (exists) {
-      if (exists) {
+    var dest = path.join(datadir, 'node_modules')
+    // try for an exact match
+    cachier.get(hash, dest, function (err) {
+      if (!err) {
         context.comment('restored node_modules from cache')
-        return cpDir(hashdir, path.join(datadir, 'node_modules'), function (err) {
-          if (err) return done(err)
-          if (!update) return done(null, true)
-          context.cmd('npm update --color=always', done)
-        })
+        if (!update) return done(null, true)
+        return context.cmd('npm update --color=always', done)
       }
+      console.log(err)
       if (policy === 'strict') return install()
-      var branchdir = path.join(cachedir, 'node/modules', context.branch)
-      fs.exists(branchdir, function (exists) {
-        if (!exists) return install()
-        context.comment('restoring node_modules from cache')
-        cpDir(hashdir, path.join(datadir, 'node_modules'), function () {
-          context.cmd('npm prune', function (err) {
-            if (err) return done(err)
-            context.cmd('npm update', done)
-          })
+      // otherwise restore from the latest branch, prune and update
+      cachier.get(context.branch, dest, function (err) {
+        console.log(err)
+        if (err) return install()
+        context.comment('restored node_modules from cache')
+        context.cmd('npm prune', function (err) {
+          if (err) return done(err)
+          context.cmd('npm update', done)
         })
       })
     })
   })
 }
 
-function updateCache(context, cachedir, datadir, done) {
-  fs.readFile(path.join(datadir, 'package.json'), 'utf8', function (err, packagejson) {
+function updateCache(context, cachier, datadir, done) {
+  packageHash(datadir, function (err, hash) {
     if (err) return done()
-    var hash = md5(packagejson)
-      , hashdir = path.join(cachedir, 'node/modules', hash)
-      , nmdir = path.join(datadir, 'node_modules')
+    var dest = path.join(datadir, 'node_modules')
     context.comment('saved node_modules to cache')
     async.series([
-      cpDir.bind(null, nmdir, hashdir),
-      cpDir.bind(null, nmdir, path.join(cachedir, 'node/modules', context.branch))
+      cachier.update.bind(null, hash, dest),
+      cachier.update.bind(null, context.branch, dest),
     ], done)
   })
 }
@@ -87,10 +91,10 @@ module.exports = {
       prepare: function (context, done) {
         if (fs.existsSync(path.join(context.dataDir, 'package.json'))) {
           context.data({doTest: true}, 'extend')
-          return installPackages(context, context.cacheDir, context.dataDir, config.caching, config.update_cache, function (err, exact) {
+          return installPackages(context, context.cachier('modules'), context.dataDir, config.caching, config.update_cache, function (err, exact) {
             if (err) return done(err)
             if (exact) return done(err, true)
-            updateCache(context, context.cacheDir, context.dataDir, function (err) {
+            updateCache(context, context.cachier('modules'), context.dataDir, function (err) {
               done(err, true)
             })
           })
