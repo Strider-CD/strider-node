@@ -3,12 +3,12 @@
   <div class="row-fluid">
     <div class="span6">
       <div class="btn-group">
-        <div class="btn" ng-model="config.caching" btn-radio="'strict'">Strict</div>
-        <div class="btn" ng-model="config.caching" btn-radio="'loose'">Loose</div>
-        <div class="btn" ng-model="config.caching" btn-radio="'none'">None</div>
+        <div class="btn" ng-model="config.caching" ng-change="save()" btn-radio="'strict'">Strict</div>
+        <div class="btn" ng-model="config.caching" ng-change="save()" btn-radio="'loose'">Loose</div>
+        <div class="btn" ng-model="config.caching" ng-change="save()" ng-class="{ active: !config.caching }" btn-radio="'none'">None</div>
       </div>
       <label class="checkbox" ng-show="config.caching === 'strict' || config.caching === 'loose'">
-        <input type="checkbox" ng-model="config.update_cache">
+        <input type="checkbox" ng-change="save()" ng-model="config.update_cache">
         Run `npm update` after restoring the cache. This is only
         important if you have "*" dependencies.
       </label>
@@ -27,7 +27,7 @@
   </div>
 </div>
 
-<select ng-model="config.test">
+<select ng-change="save()" ng-model="config.test">
   <option value="npm test">npm test</option>
   <option value="make test">make test</option>
   <option value="<none>">No test command</option>
@@ -38,10 +38,9 @@
   test using some other plugin. If you have "npm test" selected but
   there's no package.json, it is skipped.
 </p>
-<select ng-model="config.runtime" ng-options="value for value in ['0.6', '0.8', '0.10', '0.11', 'stable', 'latest', 'whatever']">
+<select ng-change="save()" ng-model="config.runtime" ng-options="value for value in ['0.6', '0.8', '0.10', '0.11', 'stable', 'latest', 'whatever']">
 </select>
 <p class="help-text">
   Select <em>whatever</em> if you want to just use whatever version of
   node is on your machine.
 </p>
-<button class="btn btn-primary" ng-click="save()">Save</button>
