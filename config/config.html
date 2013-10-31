@@ -51,8 +51,11 @@
     globally. If the above caching policy is not "none", they will be
     cached, and any change to this list will invalidate the cache.
   </p>
-  <ul class="unstyled">
-    <li ng-repeat="item in config.globals">[[ item ]] <i class="icon-remove" ng-click="removeGlobal($index)"></i></li>
+  <ul class="globals unstyled">
+    <li ng-repeat="item in config.globals">
+      <i class="icon-remove" ng-click="removeGlobal($index)"></i>
+      [[ item ]]
+    </li>
     <li ng-hide="config.globals.length">No global packages will be installed</li>
   </ul>
   <div class="form-inline">
