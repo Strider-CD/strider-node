@@ -48,11 +48,9 @@ function installPackages(context, cachier, datadir, policy, update, done) {
         if (!update) return done(null, true)
         return context.cmd('npm update --color=always', done)
       }
-      console.log(err)
       if (policy === 'strict') return install()
       // otherwise restore from the latest branch, prune and update
       cachier.get(context.branch, dest, function (err) {
-        console.log(err)
         if (err) return install()
         context.comment('restored node_modules from cache')
         context.cmd('npm prune', function (err) {
@@ -76,6 +74,32 @@ function updateCache(context, cachier, datadir, done) {
   })
 }
 
+function updateGlobalCache(globals, context, cachier, datadir, done) {
+  var dest = path.join(datadir, 'node_modules')
+  context.comment('saved global modules to cache')
+  cachier.update(md5(globals.join(' ')), dest, done)
+}
+
+function installGlobals(globals, context, cachier, globalDir, policy, done) {
+  function install() {
+    mkdirp(path.join(globalDir, 'node_modules'), function () {
+      context.cmd({
+        cmd: {command: 'npm', args: ['install', '--color=always'].concat(globals)},
+        cwd: globalDir
+      }, function (err) {
+        return done(err)
+      })
+    })
+  }
+  if (policy !== 'strict' && policy !== 'loose') return install()
+  var dest = path.join(globalDir, 'node_modules')
+  cachier.get(md5(globals.join(' ')), dest, function (err) {
+    if (err) return install()
+    context.comment('restored global modules from cache')
+    return done(null, true)
+  })
+}
+
 module.exports = {
   // Initialize the plugin for a job
   //   config:     taken from DB config extended by flat file config
@@ -87,19 +111,32 @@ module.exports = {
       env: {
         MOCHA_COLORS: 1
       },
-      path: [path.join(__dirname, 'node_modules/.bin')],
+      path: [path.join(__dirname, 'node_modules/.bin'), path.join(__dirname, '.globals/node_modules/.bin')],
       prepare: function (context, done) {
-        if (fs.existsSync(path.join(context.dataDir, 'package.json'))) {
-          context.data({doTest: true}, 'extend')
-          return installPackages(context, context.cachier('modules'), context.dataDir, config.caching, config.update_cache, function (err, exact) {
-            if (err) return done(err)
-            if (exact) return done(err, true)
-            updateCache(context, context.cachier('modules'), context.dataDir, function (err) {
-              done(err, true)
+        var npmInstall = fs.existsSync(path.join(context.dataDir, 'package.json'))
+          , global = config.globals && config.globals.length
+        if (config.test && config.test !== '<none>') context.data({doTest: true}, 'extend')
+        if (!npmInstall && !global) return done(null, false)
+        var tasks = []
+        var nocache = config.caching !== 'strict' && config.caching !== 'loose'
+        if (npmInstall) {
+          tasks.push(function (next) {
+            installPackages(context, context.cachier('modules'), context.dataDir, config.caching, config.update_cache, function (err, exact) {
+              if (err || exact || nocache) return next(err)
+              updateCache(context, context.cachier('modules'), context.dataDir, next)
             })
           })
         }
-        done(null, false)
+        if (global) {
+          tasks.push(function (next) {
+            var globalDir = path.join(context.dataDir, '.globals')
+            installGlobals(config.globals, context, context.cachier('globals'), globalDir, config.caching, function (err, cached) {
+              if (err || nocache || cached) return next(err)
+              updateGlobalCache(config.globals, context, context.cachier('globals'), globalDir, next)
+            })
+          })
+        }
+        async.series(tasks, done)
       },
       // cleanup: 'rm -rf node_modules'
     }

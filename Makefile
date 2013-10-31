@@ -2,7 +2,7 @@
 test: lint
 	@mocha -R spec
 
-tolint := *.js *.json lib
+tolint := *.js *.json
 
 lint:
 	@jshint --verbose $(tolint)

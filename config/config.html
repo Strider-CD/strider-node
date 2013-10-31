@@ -44,3 +44,19 @@
   Select <em>whatever</em> if you want to just use whatever version of
   node is on your machine.
 </p>
+<div>
+  <h4>Globally Installed Node Modules</h4>
+  <p>
+    Specify here which node modules you want to have available
+    globally. If the above caching policy is not "none", they will be
+    cached, and any change to this list will invalidate the cache.
+  </p>
+  <ul class="unstyled">
+    <li ng-repeat="item in config.globals">[[ item ]] <i class="icon-remove" ng-click="removeGlobal($index)"></i></li>
+    <li ng-hide="config.globals.length">No global packages will be installed</li>
+  </ul>
+  <div class="form-inline">
+    <input placeholder="my-package@1.0.0" ng-model="new_package">
+    <button class="btn btn-primary" ng-disabled="!new_package" ng-click="addGlobal()">Add</button>
+  </div>
+</div>

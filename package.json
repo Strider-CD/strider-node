@@ -4,7 +4,7 @@
   "description": "Run Nodejs tests in Strider",
   "main": "worker.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "make test"
   },
   "dependencies": {
     "strider-detection-rules": "0.0.1",
@@ -27,7 +27,9 @@
     "webapp": "webapp.js",
     "worker": "worker.js",
     "icon": "icon.png",
-    "config": true,
+    "config": {
+      "controller": "NodeController"
+    },
     "build-status": {
       "style": "config/build.less",
       "template": "config/build.html",
