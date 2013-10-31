@@ -111,7 +111,7 @@ module.exports = {
       env: {
         MOCHA_COLORS: 1
       },
-      path: [path.join(__dirname, 'node_modules/.bin'), path.join(__dirname, '.globals/node_modules/.bin')],
+      path: [path.join(context.dataDir, 'node_modules/.bin'), path.join(context.dataDir, '.globals/node_modules/.bin')],
       prepare: function (context, done) {
         var npmInstall = fs.existsSync(path.join(context.dataDir, 'package.json'))
           , global = config.globals && config.globals.length
