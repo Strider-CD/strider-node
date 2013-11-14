@@ -1,6 +1,5 @@
 
 test: lint
-	@mocha -R spec
 
 tolint := *.js *.json
 

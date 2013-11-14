@@ -16,18 +16,5 @@ module.exports = {
     globals: [{
       type: String
     }]
-  },
-  /** This is where we'd fire off extra builds
-  listen: function (io) {
-    io.on('job.new', function (job) {
-      if (job.trigger.type !== 'commit') return
-      newjob = copy(job)
-      newjob.trigger = {
-        ...
-      }
-      io.emit('job.new', newjob);
-      ...
-    })
   }
-  **/
 }
