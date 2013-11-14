@@ -1,13 +1,11 @@
 {
     "plugins": [{
-        {
-            "id": "node",
-            "enabled": true,
-            "showStatus": false,
-            "config": {
-                "globals": ["jshint"],
-                "test": "make test"
-            }
+        "id": "node",
+        "enabled": true,
+        "showStatus": false,
+        "config": {
+            "globals": ["jshint"],
+            "test": "make test"
         }
     }]
 }
