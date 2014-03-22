@@ -122,7 +122,7 @@ module.exports = {
         if (npmInstall) {
           tasks.push(function (next) {
             installPackages(context, context.cachier('modules'), context.dataDir, config.caching, config.update_cache, function (err, exact) {
-              if (err || exact || nocache) return next(err)
+              if (err || exact === true || nocache) return next(err)
               updateCache(context, context.cachier('modules'), context.dataDir, next)
             })
           })
