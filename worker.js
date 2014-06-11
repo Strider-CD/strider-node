@@ -74,7 +74,7 @@ function updateGlobalCache(globals, context, cachier, datadir, done) {
 
 function installGlobals(globals, context, cachier, globalDir, policy, done) {
   function install() {
-    mkdirp(path.join(globalDir, 'node_modules'), function () {
+    fs.mkdirp(path.join(globalDir, 'node_modules'), function () {
       context.cmd({
         cmd: {command: npm, args: ['install', '--color=always'].concat(globals), screen: 'npm install -g'},
         cwd: globalDir
