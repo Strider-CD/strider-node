@@ -1,24 +1,16 @@
 var path = require('path')
-  , fs = require('fs')
+  , fs = require('fs-extra')
   , spawn = require('child_process').spawn
 
   , async = require('async')
   , md5 = require('MD5')
-  , mkdirp = require('mkdirp')
+  , npm = process.platform === 'win32' ? 'npm.cmd' : 'npm'
 
 function cpDir(from, to, done) {
-  spawn('rm', ['-rf', to]).on('close', function () {
-    mkdirp(path.dirname(to), function () {
-      var out = ''
-        , child = spawn('cp', ['-R', from, to])
-      child.stdout.on('data', function (data) {
-        out += data.toString()
-      })
-      child.stderr.on('data', function (data) {
-        out += data.toString()
-      })
-      child.on('close', function (exitCode) {
-        return done(exitCode && new Error('Failed to copy directory: ' + out + ' ' + exitCode))
+  fs.remove(to, function () {
+    fs.mkdirp(path.dirname(to), function () {
+      fs.copy(from, to, function (err) {
+        return done(err && new Error('Failed to copy directory: ' + err))
       })
     })
   })
@@ -34,7 +26,7 @@ function packageHash(dir, done) {
 
 function installPackages(context, cachier, datadir, policy, update, done) {
   function install() {
-    context.cmd('npm install --color=always', done)
+    context.cmd({command: npm, args: ['install', '--color=always'], screen: 'npm install'}, done)
   }
   if (policy !== 'strict' && policy !== 'loose') return install()
   // hash the package.json
@@ -46,16 +38,16 @@ function installPackages(context, cachier, datadir, policy, update, done) {
       if (!err) {
         context.comment('restored node_modules from cache')
         if (!update) return done(null, true)
-        return context.cmd('npm update --color=always', done)
+        return context.cmd({command: npm, args: ['update', '--color=always'], screen: 'npm update'}, done)
       }
       if (policy === 'strict') return install()
       // otherwise restore from the latest branch, prune and update
       cachier.get(context.branch, dest, function (err) {
         if (err) return install()
         context.comment('restored node_modules from cache')
-        context.cmd('npm prune', function (err) {
+        context.cmd({command: npm, args: ['prune', '--color=always'], screen: 'npm prune'}, function (err) {
           if (err) return done(err)
-          context.cmd('npm update', done)
+          context.cmd({command: npm, args: ['update', '--color=always'], screen: 'npm update'}, done)
         })
       })
     })
@@ -82,9 +74,9 @@ function updateGlobalCache(globals, context, cachier, datadir, done) {
 
 function installGlobals(globals, context, cachier, globalDir, policy, done) {
   function install() {
-    mkdirp(path.join(globalDir, 'node_modules'), function () {
+    fs.mkdirp(path.join(globalDir, 'node_modules'), function () {
       context.cmd({
-        cmd: {command: 'npm', args: ['install', '--color=always'].concat(globals)},
+        cmd: {command: npm, args: ['install', '--color=always'].concat(globals), screen: 'npm install -g'},
         cwd: globalDir
       }, function (err) {
         return done(err)
@@ -142,6 +134,8 @@ module.exports = {
     }
     if (config.test && config.test !== '<none>') {
       ret.test = typeof(config.test) !== 'string' ? 'npm test' : config.test
+      if (ret.test === 'npm test') 
+        ret.test = {command: npm, args: ['test', '--color=always'], screen: 'npm test'}
     }
     if (config.runtime && config.runtime !== 'whatever') {
       ret.env.N_PREFIX = path.join(context.baseDir, '.n')
