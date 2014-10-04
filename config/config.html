@@ -59,7 +59,7 @@
     <li ng-hide="config.globals.length">No global packages will be installed</li>
   </ul>
   <div class="form-inline">
-    <input placeholder="my-package@1.0.0" ng-model="new_package">
+    <input placeholder="my-package@1.0.0" ng-model="new_package" type="text">
     <button class="btn btn-primary" ng-disabled="!new_package" ng-click="addGlobal()">Add</button>
   </div>
 </div>
