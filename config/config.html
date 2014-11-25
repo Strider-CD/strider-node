@@ -27,7 +27,17 @@
   </div>
 </div>
 
-<select ng-change="save()" ng-model="config.test">
+<label for="node-version" class="bold-label">Node Version</label>
+<select id="node-version" ng-change="save()" ng-model="config.runtime" placeholder="Node Version"
+  ng-options="value for value in ['0.6', '0.8', '0.10', '0.11', 'stable', 'latest', 'whatever']">
+</select>
+<p class="help-text">
+  Select <em>whatever</em> if you want to just use whatever version of
+  node is on your machine.
+</p>
+
+<label for="node-test-command" class="bold-label">Test Command</label>
+<select id="node-test-command" ng-change="save()" ng-model="config.test" placeholder="Test Command">
   <option value="npm test">npm test</option>
   <option value="make test">make test</option>
   <option value="<none>">No test command</option>
@@ -38,28 +48,24 @@
   test using some other plugin. If you have "npm test" selected but
   there's no package.json, it is skipped.
 </p>
-<select ng-change="save()" ng-model="config.runtime" ng-options="value for value in ['0.6', '0.8', '0.10', '0.11', 'stable', 'latest', 'whatever']">
-</select>
-<p class="help-text">
-  Select <em>whatever</em> if you want to just use whatever version of
-  node is on your machine.
-</p>
+
 <div>
-  <h4>Globally Installed Node Modules</h4>
+  <h4>Global NPM Modules</h4>
   <p>
     Specify here which node modules you want to have available
     globally. If the above caching policy is not "none", they will be
     cached, and any change to this list will invalidate the cache.
   </p>
+  <form class="form-inline" ng-submit="addGlobal()">
+    <input placeholder="my-package@1.0.0" ng-model="new_package" type="text">
+    <button type="submit" class="btn btn-success" ng-disabled="!new_package">Add Package</button>
+  </form>
+
   <ul class="globals unstyled">
     <li ng-repeat="item in config.globals">
-      <i class="icon-remove" ng-click="removeGlobal($index)"></i>
+      <i class="fa fa-times" ng-click="removeGlobal($index)"></i>
       [[ item ]]
     </li>
     <li ng-hide="config.globals.length">No global packages will be installed</li>
   </ul>
-  <div class="form-inline">
-    <input placeholder="my-package@1.0.0" ng-model="new_package" type="text">
-    <button class="btn btn-primary" ng-disabled="!new_package" ng-click="addGlobal()">Add</button>
-  </div>
 </div>
