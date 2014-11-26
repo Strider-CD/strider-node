@@ -1,16 +1,13 @@
 'use strict';
 
 var path = require('path');
-var spawn = require('child_process').spawn;
 var fs = require('fs-extra');
 var async = require('async');
-var md5 = require('MD5');
-var packageHash = require('./lib/package-hash');
 var installPackages = require('./lib/install-packages');
 var updateCache = require('./lib/update-cache');
 var updateGlobalCache = require('./lib/update-global-cache');
 var installGlobals = require('./lib/install-globals');
-var npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+var npmCommand = require('./lib/npm-command');
 
 module.exports = {
   // Initialize the plugin for a job
@@ -72,15 +69,15 @@ module.exports = {
         }
 
         async.series(tasks, done);
-      };
+      }
       // cleanup: 'rm -rf node_modules'
     };
 
     if (config.test && config.test !== '<none>') {
-      ret.test = typeof(config.test) !== 'string' ? 'npm test' : config.test
+      ret.test = typeof(config.test) !== 'string' ? 'npm test' : config.test;
 
-      if (ret.test === 'npm test') { 
-        ret.test = { command: npm, args: ['test', '--color=always'], screen: 'npm test' };
+      if (ret.test === 'npm test') {
+        ret.test = npmCommand('test');
       }
     }
 
@@ -108,5 +105,4 @@ module.exports = {
     language: 'node.js',
     framework: null
   }
-}
-
+};
