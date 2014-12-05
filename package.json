@@ -15,7 +15,7 @@
     "async": "^0.2.9",
     "fs-extra": "^0.8.1",
     "n": "^1.1.0",
-    "npm": "^2.1.11",
+    "npm": ">1.4.0 <3.0.0",
     "strider-detection-rules": "0.0.1"
   },
   "keywords": [
