@@ -11,12 +11,12 @@
     "url": "https://github.com/Strider-CD/strider-node"
   },
   "dependencies": {
-    "strider-detection-rules": "0.0.1",
-    "npm": "~1.3.11",
-    "n": "~1.1.0",
-    "MD5": "~1.1.0",
-    "async": "~0.2.9",
-    "fs-extra": "~0.8.1"
+    "MD5": "^1.1.0",
+    "async": "^0.2.9",
+    "fs-extra": "^0.8.1",
+    "n": "^1.1.0",
+    "npm": ">1.4.0 <3.0.0",
+    "strider-detection-rules": "0.0.1"
   },
   "keywords": [
     "strider",
@@ -44,7 +44,7 @@
     }
   },
   "devDependencies": {
-    "jshint": "~2.3.0",
+    "jshint": "^2.3.0",
     "tap-spec": "^2.1.0",
     "tape": "^3.0.3"
   }
