@@ -1,55 +1,41 @@
-<div class="well">
-  <h4>node_modules caching</h4>
-  <div class="row-fluid">
-    <div class="span6">
-      <div class="btn-group">
-        <div class="btn" ng-model="config.caching" ng-change="save()" btn-radio="'strict'">Strict</div>
-        <div class="btn" ng-model="config.caching" ng-change="save()" btn-radio="'loose'">Loose</div>
-        <div class="btn" ng-model="config.caching" ng-change="save()" ng-class="{ active: !config.caching }" btn-radio="'none'">None</div>
-      </div>
-      <label class="checkbox" ng-show="config.caching === 'strict' || config.caching === 'loose'">
-        <input type="checkbox" ng-change="save()" ng-model="config.update_cache">
-        Run `npm update` after restoring the cache. This is only
-        important if you have "*" dependencies.
-      </label>
-    </div>
-    <div class="span6">
-      <p>
-        <strong>Strict</strong> cache your modules according to an md5
-        hash of the package.json. Any change will cause a fresh npm
-        install, w/o the cache.
-      </p>
-      <p>
-        <strong>Loose</strong> cache everything, and run `npm update`
-        and `npm prune` after restoring the cache.
-      </p>
-    </div>
-  </div>
+<h2>
+  Node
+  <button ng-click="save()" class="btn btn-primary pull-right">Save</button>
+</h2>
+
+<div class="form-group">
+  <label for="node-version" class="bold-label">Node Version</label>
+  <select id="node-version" ng-change="save()" ng-model="config.runtime" placeholder="Node Version"
+    ng-options="value for value in ['0.6', '0.8', '0.10', '0.11', 'stable', 'latest', 'whatever']">
+  </select>
+  <p class="help-text">
+    Select <em>whatever</em> if you want to just use whatever version of
+    node is on your machine.
+  </p>
+
+  <label for="node-test-command" class="bold-label">Test Command</label>
+  <select id="node-test-command" ng-change="save()" ng-model="config.test" placeholder="Test Command">
+    <option value="npm test">npm test</option>
+    <option value="make test">make test</option>
+    <option value="<none>">No test command</option>
+  </select>
+  <p class="help-text">
+    Select which command should be used to test your
+    project. Alternatively, select "No test command" if you are going to
+    test using some other plugin. If you have "npm test" selected but
+    there's no package.json, it is skipped.
+  </p>
+
+  <label for="node-project-subdir" class="bold-label">Project Subdirectory</label>
+  <input type="text" ng-model="config.subdir" placeholder="subdirectory for project">
+  <p class="help-text">
+    Optional. Usually set if your package.json is located deeper down in the folder structure of
+    your repository, or if there are multiple node projects in this one repository. A valid
+    value is something like "myproject/", notice the lack of a slash in the beginning.
+  </p>
 </div>
 
-<label for="node-version" class="bold-label">Node Version</label>
-<select id="node-version" ng-change="save()" ng-model="config.runtime" placeholder="Node Version"
-  ng-options="value for value in ['0.6', '0.8', '0.10', '0.11', 'stable', 'latest', 'whatever']">
-</select>
-<p class="help-text">
-  Select <em>whatever</em> if you want to just use whatever version of
-  node is on your machine.
-</p>
-
-<label for="node-test-command" class="bold-label">Test Command</label>
-<select id="node-test-command" ng-change="save()" ng-model="config.test" placeholder="Test Command">
-  <option value="npm test">npm test</option>
-  <option value="make test">make test</option>
-  <option value="<none>">No test command</option>
-</select>
-<p class="help-text">
-  Select which command should be used to test your
-  project. Alternatively, select "No test command" if you are going to
-  test using some other plugin. If you have "npm test" selected but
-  there's no package.json, it is skipped.
-</p>
-
-<div>
+<div class="form-group">
   <h4>Global NPM Modules</h4>
   <p>
     Specify here which node modules you want to have available
@@ -69,3 +55,36 @@
     <li ng-hide="config.globals.length">No global packages will be installed</li>
   </ul>
 </div>
+
+<div>
+  <h4>node_modules caching</h4>
+  <div class="well">
+    <div class="row-fluid">
+      <div class="span6">
+        <div class="btn-group">
+          <div class="btn" ng-model="config.caching" ng-change="save()" btn-radio="'strict'">Strict</div>
+          <div class="btn" ng-model="config.caching" ng-change="save()" btn-radio="'loose'">Loose</div>
+          <div class="btn" ng-model="config.caching" ng-change="save()" ng-class="{ active: !config.caching }" btn-radio="'none'">None</div>
+        </div>
+        <label class="checkbox" ng-show="config.caching === 'strict' || config.caching === 'loose'">
+          <input type="checkbox" ng-change="save()" ng-model="config.update_cache">
+          Run `npm update` after restoring the cache. This is only
+          important if you have "*" dependencies.
+        </label>
+      </div>
+      <div class="span6">
+        <p>
+          <strong>Strict</strong> cache your modules according to an md5
+          hash of the package.json. Any change will cause a fresh npm
+          install, w/o the cache.
+        </p>
+        <p>
+          <strong>Loose</strong> cache everything, and run `npm update`
+          and `npm prune` after restoring the cache.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button ng-click="save()" class="btn btn-primary pull-right">Save</button>

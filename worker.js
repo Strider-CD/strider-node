@@ -17,6 +17,9 @@ module.exports = {
   init: function (config, job, context, cb) {
     config = config || {};
 
+    var subDir = config.subdir || '';
+    var projectDir = path.join(context.dataDir, subDir);
+
     var ret = {
       env: {
         MOCHA_COLORS: 1
@@ -28,7 +31,7 @@ module.exports = {
       ],
 
       prepare: function (context, done) {
-        var npmInstall = fs.existsSync(path.join(context.dataDir, 'package.json'));
+        var npmInstall = fs.existsSync(path.join(context.dataDir, subDir, 'package.json'));
         var global = config.globals && config.globals.length;
 
         if (config.test && config.test !== '<none>') {
@@ -76,9 +79,10 @@ module.exports = {
     if (config.test && config.test !== '<none>') {
       ret.test = typeof(config.test) !== 'string' ? 'npm test' : config.test;
 
-      if (ret.test === 'npm test') {
-        ret.test = npmCommand('test');
-      }
+      ret.test = {
+        cmd: ret.test === 'npm test' ? npmCommand('test') : ret.test,
+        cwd: projectDir
+      };
     }
 
     if (config.runtime && config.runtime !== 'whatever') {
