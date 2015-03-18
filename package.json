@@ -17,8 +17,8 @@
   "author": "Peter Braden",
   "license": "BSD",
   "dependencies": {
-    "npm": ">=1.4.0 <3.0.0",
-    "n": "^1.1.0",
+    "npm": "^2.7.1",
+    "n": "^1.2.13",
     "MD5": "^1.1.0",
     "async": "^0.2.9",
     "fs-extra": "^0.8.1"
