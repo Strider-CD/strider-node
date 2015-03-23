@@ -4,7 +4,7 @@ module.exports = {
   config: {
     runtime: {
       type: String,
-      enum: ['0.6', '0.8', '0.10', '0.11', 'stable', 'latest', 'whatever'],
+      enum: ['0.8', '0.10', '0.11', '0.12', 'stable', 'latest', 'whatever'],
       default: 'whatever'
     },
     caching: {
