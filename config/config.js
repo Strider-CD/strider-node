@@ -1,19 +1,29 @@
 
 app.controller('NodeController', ['$scope', function ($scope) {
+  $scope.nodeVersions = ['0.8', '0.10', '0.12', 'stable', 'latest', 'whatever'];
+  $scope.ioVersions = ['stable', 'latest', 'whatever'];
+  $scope.saving = false;
+
+  $scope.$watch('config.fork', function (fork) {
+    $scope.forkVersions = fork === 'Node.js' ? $scope.nodeVersions : $scope.ioVersions;
+  });
+
   $scope.$watch('configs[branch.name].node.config', function (value) {
     $scope.config = value;
   });
-  $scope.saving = false;
+
   $scope.save = function () {
     $scope.saving = true;
     $scope.pluginConfig('node', $scope.config, function () {
       $scope.saving = false;
     });
   };
+
   $scope.removeGlobal = function (index) {
     $scope.config.globals.splice(index, 1);
     $scope.save();
   };
+
   $scope.addGlobal = function () {
     if (!$scope.config.globals) $scope.config.globals = [];
     $scope.config.globals.push($scope.new_package);

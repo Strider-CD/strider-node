@@ -94,7 +94,7 @@ module.exports = {
       ]);
 
       ret.environment = {
-        cmd: 'n ' + config.runtime,
+        cmd: 'n ' + (config.fork === 'io.js' ? 'io ' : '') + config.runtime,
         silent: true
       };
     }

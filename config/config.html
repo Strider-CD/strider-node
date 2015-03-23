@@ -4,13 +4,22 @@
 </h2>
 
 <div class="form-group">
-  <label for="node-version" class="bold-label">Node Version</label>
+  <label class="bold-label">Node Fork</label>
+  <div class="btn-group">
+    <div class="btn" ng-model="config.fork" ng-change="save()" btn-radio="'Node.js'" ng-class="{ active: config.fork === 'Node.js' }">Node.js</div>
+    <div class="btn" ng-model="config.fork" ng-change="save()" btn-radio="'io.js'">io.js</div>
+  </div>
+  <p class="help-text">
+    All forks will expose the `node` command line binary.
+  </p>
+
+  <label for="node-version" class="bold-label">Fork Version</label>
   <select id="node-version" ng-change="save()" ng-model="config.runtime" placeholder="Node Version"
-    ng-options="value for value in ['0.6', '0.8', '0.10', '0.11', 'stable', 'latest', 'whatever']">
+    ng-options="value for value in forkVersions">
   </select>
   <p class="help-text">
     Select <em>whatever</em> if you want to just use whatever version of
-    node is on your machine.
+    the fork is on your machine.
   </p>
 
   <label for="node-test-command" class="bold-label">Test Command</label>
