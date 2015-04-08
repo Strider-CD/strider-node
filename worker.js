@@ -92,15 +92,8 @@ module.exports = {
         ret.env.N_PREFIX + '/bin'
       ]);
 
-      ret.environment = {
-        cmd: 'n ' + (config.fork === 'io.js' ? 'io ' : '') + config.runtime,
-        silent: true
-      };
-      
-      ret.cleanup = {
-        cmd: 'n prev',
-        silent: true
-      };
+      ret.environment = 'n ' + (config.fork === 'io.js' ? 'io ' : '') + config.runtime;
+      ret.cleanup = 'n prev';
     }
 
     cb(null, ret);
