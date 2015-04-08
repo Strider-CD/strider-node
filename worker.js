@@ -73,7 +73,6 @@ module.exports = {
 
         async.series(tasks, done);
       }
-      // cleanup: 'rm -rf node_modules'
     };
 
     if (config.test && config.test !== '<none>') {
@@ -95,6 +94,11 @@ module.exports = {
 
       ret.environment = {
         cmd: 'n ' + (config.fork === 'io.js' ? 'io ' : '') + config.runtime,
+        silent: true
+      };
+      
+      ret.cleanup = {
+        cmd: 'n prev',
         silent: true
       };
     }
