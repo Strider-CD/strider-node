@@ -19,6 +19,7 @@ module.exports = {
 
     var subDir = config.subdir || '';
     var projectDir = path.join(context.dataDir, subDir);
+    var globalsDir = path.join(context.dataDir, '.globals');
 
     var ret = {
       env: {
@@ -27,11 +28,11 @@ module.exports = {
 
       path: [
         path.join(__dirname, 'node_modules/.bin'),
-        path.join(context.dataDir, '.globals/node_modules/.bin')
+        path.join(globalsDir, 'node_modules/.bin')
       ],
 
       prepare: function (context, done) {
-        var npmInstall = fs.existsSync(path.join(context.dataDir, subDir, 'package.json'));
+        var npmInstall = fs.existsSync(path.join(projectDir, 'package.json'));
         var global = config.globals && config.globals.length;
 
         if (config.test && config.test !== '<none>') {
@@ -59,14 +60,12 @@ module.exports = {
 
         if (global) {
           tasks.push(function (next) {
-            var globalDir = path.join(context.dataDir, '.globals');
-
-            installGlobals(config, context, globalDir, function (err, cached) {
+            installGlobals(config, context, globalsDir, function (err, cached) {
               if (err || nocache || cached) {
                 return next(err);
               }
 
-              updateGlobalCache(config.globals, context, globalDir, next);
+              updateGlobalCache(config.globals, context, globalsDir, next);
             });
           });
         }
