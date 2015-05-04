@@ -53,7 +53,7 @@ module.exports = {
                 return next(err);
               }
 
-              updateCache(context, next);
+              updateCache(context, projectDir, next);
             });
           });
         }
