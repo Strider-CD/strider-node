@@ -1,6 +1,6 @@
 
 app.controller('NodeController', ['$scope', function ($scope) {
-  $scope.nodeVersions = ['0.8', '0.10', '0.12', 'stable', 'latest', 'whatever'];
+  $scope.nodeVersions = ['0.10', '0.12', 'lts', 'stable', 'latest', 'whatever', 'custom'];
   $scope.ioVersions = ['stable', 'latest', 'whatever'];
   $scope.saving = false;
 
