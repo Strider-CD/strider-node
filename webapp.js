@@ -12,6 +12,10 @@ module.exports = {
       enum: ['0.10', '0.12', 'lts', 'stable', 'latest', 'whatever', 'custom'],
       default: 'whatever'
     },
+    customVersion: {
+      type: String,
+      default: '4.3'
+    },
     caching: {
       type: String,
       enum: ['strict', 'loose', 'none'],
