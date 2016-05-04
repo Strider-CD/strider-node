@@ -21,6 +21,15 @@
     Select <em>whatever</em> if you want to just use whatever version of
     the fork is on your machine.
   </p>
+  
+  <div ng-if="config.runtime === 'custom'">
+    <label for="custom-version" class="bold-label">Custom Version</label>
+    <input type="text" ng-model="config.customVersion" placeholder="Custom Version">
+    <p class="help-test">
+      Input a custom version, based on the allowed input for <a href="https://github.com/tj/n#usage" target="_blank">n ___</a>.
+      Valid input includes '4.3' or '5.1.1' (without the quotes).
+    </p>
+  </div>
 
   <label for="node-test-command" class="bold-label">Test Command</label>
   <select id="node-test-command" ng-change="save()" ng-model="config.test" placeholder="Test Command">

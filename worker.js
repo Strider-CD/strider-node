@@ -90,8 +90,10 @@ module.exports = {
         path.join(__dirname, 'node_modules/n/bin'),
         ret.env.N_PREFIX + '/bin'
       ]);
+      
+      var version = config.runtime === 'custom' ? config.customVersion : config.runtime;
 
-      ret.environment = 'n ' + (config.fork === 'io.js' ? 'io ' : '') + config.runtime;
+      ret.environment = 'n ' + (config.fork === 'io.js' ? 'io ' : '') + version;
       ret.cleanup = 'n prev';
     }
 
