@@ -42,16 +42,6 @@ module.exports = {
         var tasks = [];
         var nocache = config.caching !== 'strict' && config.caching !== 'loose';
 
-        tasks.push(function (next) {
-          installPackages(config, context, function (err, exact) {
-            if (err || exact === true || nocache) {
-              return next(err);
-            }
-
-            updateCache(context, projectDir, next);
-          });
-        });
-
         if (installGlobalPackages) {
           tasks.push(function (next) {
             installGlobals(config, context, globalsDir, function (err, cached) {
@@ -63,6 +53,16 @@ module.exports = {
             });
           });
         }
+
+        tasks.push(function (next) {
+          installPackages(config, context, function (err, exact) {
+            if (err || exact === true || nocache) {
+              return next(err);
+            }
+
+            updateCache(context, projectDir, next);
+          });
+        });
 
         async.series(tasks, done);
       }
