@@ -18,7 +18,7 @@ test('npm command', function (t) {
   t.same(installGlobal, {
     command: 'npm',
     args: ['install', '--color=always', 'bower'],
-    screen: 'npm install -g'
+    screen: 'npm install -g bower'
   }, 'globals are correct');
   t.end();
 });
