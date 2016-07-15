@@ -22,8 +22,8 @@
     "fs-extra": "^0.8.1"
   },
   "devDependencies": {
-    "eslint": "^3.0.1",
-    "tap-spec": "1",
+    "eslint": "^2.13.1",
+    "tap-spec": "^1.0.1",
     "tape": "^3.0.3"
   },
   "strider": {
