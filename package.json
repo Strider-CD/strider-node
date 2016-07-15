@@ -4,13 +4,13 @@
   "description": "Run Nodejs tests in Strider",
   "main": "worker.js",
   "scripts": {
-    "test": "jshint webapp.js worker.js lib/ && node test | tap-spec"
+    "test": "eslint webapp.js worker.js lib/ && node test | tap-spec"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/Strider-CD/strider-node"
   },
-    "keywords": [
+  "keywords": [
     "strider",
     "node"
   ],
@@ -22,7 +22,7 @@
     "fs-extra": "^0.8.1"
   },
   "devDependencies": {
-    "jshint": "^2.3.0",
+    "eslint": "^3.0.1",
     "tap-spec": "^2.1.0",
     "tape": "^3.0.3"
   },

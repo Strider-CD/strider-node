@@ -1,4 +1,3 @@
-
 app.controller('NodeController', ['$scope', function ($scope) {
   $scope.nodeVersions = ['0.10', '0.12', 'lts', 'stable', 'latest', 'whatever', 'custom'];
   $scope.ioVersions = ['stable', 'latest', 'whatever'];

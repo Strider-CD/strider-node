@@ -36,7 +36,7 @@ module.exports = {
         var global = config.globals && config.globals.length;
 
         if (config.test && config.test !== '<none>') {
-          context.data({ doTest: true }, 'extend');
+          context.data({doTest: true}, 'extend');
         }
 
         if (!npmInstall && !global) {
