@@ -32,33 +32,27 @@ module.exports = {
       ],
 
       prepare: function (context, done) {
-        var npmInstall = fs.existsSync(path.join(projectDir, 'package.json'));
-        var global = config.globals && config.globals.length;
+        // Did the user specify any packages to be globally insalled?
+        var installGlobalPackages = config.globals && config.globals.length;
 
         if (config.test && config.test !== '<none>') {
           context.data({doTest: true}, 'extend');
         }
 
-        if (!npmInstall && !global) {
-          return done(null, false);
-        }
-
         var tasks = [];
         var nocache = config.caching !== 'strict' && config.caching !== 'loose';
 
-        if (npmInstall) {
-          tasks.push(function (next) {
-            installPackages(config, context, function (err, exact) {
-              if (err || exact === true || nocache) {
-                return next(err);
-              }
+        tasks.push(function (next) {
+          installPackages(config, context, function (err, exact) {
+            if (err || exact === true || nocache) {
+              return next(err);
+            }
 
-              updateCache(context, projectDir, next);
-            });
+            updateCache(context, projectDir, next);
           });
-        }
+        });
 
-        if (global) {
+        if (installGlobalPackages) {
           tasks.push(function (next) {
             installGlobals(config, context, globalsDir, function (err, cached) {
               if (err || nocache || cached) {
