@@ -1,7 +1,6 @@
 'use strict';
 
 var path = require('path');
-var fs = require('fs-extra');
 var async = require('async');
 var installPackages = require('./lib/install-packages');
 var updateCache = require('./lib/update-cache');
