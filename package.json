@@ -15,7 +15,7 @@
     "node"
   ],
   "author": "Peter Braden",
-  "license": "BSD",
+  "license": "BSD-3-Clause",
   "dependencies": {
     "md5": "^2.0.0",
     "async": "^1.0.0",
