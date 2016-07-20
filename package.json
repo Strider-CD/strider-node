@@ -1,6 +1,6 @@
 {
   "name": "strider-node",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Run Nodejs tests in Strider",
   "main": "worker.js",
   "scripts": {
