@@ -4,7 +4,8 @@
   "description": "Run Nodejs tests in Strider",
   "main": "worker.js",
   "scripts": {
-    "test": "eslint webapp.js worker.js lib/ && node test | tap-spec"
+    "test": "eslint webapp.js worker.js lib/ && node test | tap-spec",
+    "postinstall": "npm install n npm || true"
   },
   "repository": {
     "type": "git",
@@ -17,8 +18,6 @@
   "author": "Peter Braden",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "npm": "^2.7.1",
-    "n": "^2.1.0",
     "md5": "^2.0.0",
     "async": "^1.0.0",
     "fs-extra": "^0.8.1"
