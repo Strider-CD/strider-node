@@ -15,7 +15,11 @@
     "no-use-before-define": [2, "nofunc"],
     "no-underscore-dangle": 0,
     "no-constant-condition": 0,
-    "space-before-function-paren": [2, {"anonymous": "always", "named": "never"}],
-    "func-style": [2, "declaration"]
+    "space-before-function-paren": [
+      2,
+      { "anonymous": "always", "named": "never" }
+    ],
+    "func-style": [2, "declaration"],
+    "comma-dangle": 0
   }
 }
