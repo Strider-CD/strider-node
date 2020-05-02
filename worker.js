@@ -22,12 +22,12 @@ module.exports = {
 
     var ret = {
       env: {
-        MOCHA_COLORS: 1
+        MOCHA_COLORS: 1,
       },
 
       path: [
         path.join(__dirname, 'node_modules/.bin'),
-        path.join(globalsDir, 'node_modules/.bin')
+        path.join(globalsDir, 'node_modules/.bin'),
       ],
 
       prepare: function (context, done) {
@@ -35,7 +35,7 @@ module.exports = {
         var installGlobalPackages = config.globals && config.globals.length;
 
         if (config.test && config.test !== '<none>') {
-          context.data({doTest: true}, 'extend');
+          context.data({ doTest: true }, 'extend');
         }
 
         var tasks = [];
@@ -64,15 +64,15 @@ module.exports = {
         });
 
         async.series(tasks, done);
-      }
+      },
     };
 
     if (config.test && config.test !== '<none>') {
-      ret.test = typeof(config.test) !== 'string' ? 'npm test' : config.test;
+      ret.test = typeof config.test !== 'string' ? 'npm test' : config.test;
 
       ret.test = {
         cmd: ret.test === 'npm test' ? npmCommand('test') : ret.test,
-        cwd: projectDir
+        cwd: projectDir,
       };
     }
 
@@ -81,10 +81,11 @@ module.exports = {
       // string or list - to be prefixed to the PATH
       ret.path = ret.path.concat([
         path.join(__dirname, 'node_modules/n/bin'),
-        ret.env.N_PREFIX + '/bin'
+        ret.env.N_PREFIX + '/bin',
       ]);
 
-      var version = config.runtime === 'custom' ? config.customVersion : config.runtime;
+      var version =
+        config.runtime === 'custom' ? config.customVersion : config.runtime;
 
       ret.environment = 'n ' + (config.fork === 'io.js' ? 'io ' : '') + version;
     }
@@ -97,6 +98,6 @@ module.exports = {
     filename: 'package.json',
     exists: true,
     language: 'node.js',
-    framework: null
-  }
+    framework: null,
+  },
 };

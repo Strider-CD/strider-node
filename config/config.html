@@ -6,63 +6,101 @@
 <div class="form-group">
   <label class="bold-label">Node Fork</label>
   <div class="btn-group">
-    <div class="btn" ng-model="config.fork" ng-change="save()" btn-radio="'Node.js'" ng-class="{ active: config.fork === 'Node.js' }">Node.js</div>
-    <div class="btn" ng-model="config.fork" ng-change="save()" btn-radio="'io.js'">io.js</div>
+    <div
+      class="btn"
+      ng-model="config.fork"
+      ng-change="save()"
+      btn-radio="'Node.js'"
+      ng-class="{ active: config.fork === 'Node.js' }"
+    >
+      Node.js
+    </div>
+    <div
+      class="btn"
+      ng-model="config.fork"
+      ng-change="save()"
+      btn-radio="'io.js'"
+    >
+      io.js
+    </div>
   </div>
   <p class="help-text">
     All forks will expose the `node` command line binary.
   </p>
 
   <label for="node-version" class="bold-label">Fork Version</label>
-  <select id="node-version" ng-change="save()" ng-model="config.runtime" placeholder="Node Version"
-    ng-options="value for value in forkVersions">
+  <select
+    id="node-version"
+    ng-change="save()"
+    ng-model="config.runtime"
+    placeholder="Node Version"
+    ng-options="value for value in forkVersions"
+  >
   </select>
   <p class="help-text">
-    Select <em>whatever</em> if you want to just use whatever version of
-    the fork is on your machine.
+    Select <em>whatever</em> if you want to just use whatever version of the
+    fork is on your machine.
   </p>
-  
+
   <div ng-if="config.runtime === 'custom'">
     <label for="custom-version" class="bold-label">Custom Version</label>
-    <input type="text" ng-model="config.customVersion" placeholder="Custom Version">
+    <input
+      type="text"
+      ng-model="config.customVersion"
+      placeholder="Custom Version"
+    />
     <p class="help-test">
-      Input a custom version, based on the allowed input for <a href="https://github.com/tj/n#usage" target="_blank">n ___</a>.
-      Valid input includes '4.3' or '5.1.1' (without the quotes).
+      Input a custom version, based on the allowed input for
+      <a href="https://github.com/tj/n#usage" target="_blank">n ___</a>. Valid
+      input includes '4.3' or '5.1.1' (without the quotes).
     </p>
   </div>
 
   <label for="node-test-command" class="bold-label">Test Command</label>
-  <select id="node-test-command" ng-change="save()" ng-model="config.test" placeholder="Test Command">
+  <select
+    id="node-test-command"
+    ng-change="save()"
+    ng-model="config.test"
+    placeholder="Test Command"
+  >
     <option value="npm test">npm test</option>
     <option value="make test">make test</option>
     <option value="<none>">No test command</option>
   </select>
   <p class="help-text">
-    Select which command should be used to test your
-    project. Alternatively, select "No test command" if you are going to
-    test using some other plugin. If you have "npm test" selected but
-    there's no package.json, it is skipped.
+    Select which command should be used to test your project. Alternatively,
+    select "No test command" if you are going to test using some other plugin.
+    If you have "npm test" selected but there's no package.json, it is skipped.
   </p>
 
-  <label for="node-project-subdir" class="bold-label">Project Subdirectory</label>
-  <input type="text" ng-model="config.subdir" placeholder="subdirectory for project">
+  <label for="node-project-subdir" class="bold-label"
+    >Project Subdirectory</label
+  >
+  <input
+    type="text"
+    ng-model="config.subdir"
+    placeholder="subdirectory for project"
+  />
   <p class="help-text">
-    Optional. Usually set if your package.json is located deeper down in the folder structure of
-    your repository, or if there are multiple node projects in this one repository. A valid
-    value is something like "myproject/", notice the lack of a slash in the beginning.
+    Optional. Usually set if your package.json is located deeper down in the
+    folder structure of your repository, or if there are multiple node projects
+    in this one repository. A valid value is something like "myproject/", notice
+    the lack of a slash in the beginning.
   </p>
 </div>
 
 <div class="form-group">
   <h4>Global NPM Modules</h4>
   <p>
-    Specify here which node modules you want to have available
-    globally. If the above caching policy is not "none", they will be
-    cached, and any change to this list will invalidate the cache.
+    Specify here which node modules you want to have available globally. If the
+    above caching policy is not "none", they will be cached, and any change to
+    this list will invalidate the cache.
   </p>
   <form class="form-inline" ng-submit="addGlobal()">
-    <input placeholder="my-package@1.0.0" ng-model="new_package" type="text">
-    <button type="submit" class="btn btn-success" ng-disabled="!new_package">Add Package</button>
+    <input placeholder="my-package@1.0.0" ng-model="new_package" type="text" />
+    <button type="submit" class="btn btn-success" ng-disabled="!new_package">
+      Add Package
+    </button>
   </form>
 
   <ul class="globals unstyled">
@@ -70,7 +108,9 @@
       <i class="fa fa-times" ng-click="removeGlobal($index)"></i>
       [[ item ]]
     </li>
-    <li ng-hide="config.globals.length">No global packages will be installed</li>
+    <li ng-hide="config.globals.length">
+      No global packages will be installed
+    </li>
   </ul>
 </div>
 
@@ -80,25 +120,54 @@
     <div class="row-fluid">
       <div class="span6">
         <div class="btn-group">
-          <div class="btn" ng-model="config.caching" ng-change="save()" btn-radio="'strict'">Strict</div>
-          <div class="btn" ng-model="config.caching" ng-change="save()" btn-radio="'loose'">Loose</div>
-          <div class="btn" ng-model="config.caching" ng-change="save()" ng-class="{ active: !config.caching }" btn-radio="'none'">None</div>
+          <div
+            class="btn"
+            ng-model="config.caching"
+            ng-change="save()"
+            btn-radio="'strict'"
+          >
+            Strict
+          </div>
+          <div
+            class="btn"
+            ng-model="config.caching"
+            ng-change="save()"
+            btn-radio="'loose'"
+          >
+            Loose
+          </div>
+          <div
+            class="btn"
+            ng-model="config.caching"
+            ng-change="save()"
+            ng-class="{ active: !config.caching }"
+            btn-radio="'none'"
+          >
+            None
+          </div>
         </div>
-        <label class="checkbox" ng-show="config.caching === 'strict' || config.caching === 'loose'">
-          <input type="checkbox" ng-change="save()" ng-model="config.update_cache">
-          Run `npm update` after restoring the cache. This is only
-          important if you have "*" dependencies.
+        <label
+          class="checkbox"
+          ng-show="config.caching === 'strict' || config.caching === 'loose'"
+        >
+          <input
+            type="checkbox"
+            ng-change="save()"
+            ng-model="config.update_cache"
+          />
+          Run `npm update` after restoring the cache. This is only important if
+          you have "*" dependencies.
         </label>
       </div>
       <div class="span6">
         <p>
-          <strong>Strict</strong> cache your modules according to an md5
-          hash of the package.json. Any change will cause a fresh npm
-          install, w/o the cache.
+          <strong>Strict</strong> cache your modules according to an md5 hash of
+          the package.json. Any change will cause a fresh npm install, w/o the
+          cache.
         </p>
         <p>
-          <strong>Loose</strong> cache everything, and run `npm update`
-          and `npm prune` after restoring the cache.
+          <strong>Loose</strong> cache everything, and run `npm update` and `npm
+          prune` after restoring the cache.
         </p>
       </div>
     </div>
