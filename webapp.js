@@ -8,12 +8,12 @@ module.exports = {
     },
     runtime: {
       type: String,
-      enum: ['0.10', '0.12', 'lts', 'stable', 'latest', 'whatever', 'custom'],
+      enum: ['14', '12', '10', 'lts', 'stable', 'latest', 'whatever', 'custom'],
       default: 'whatever',
     },
     customVersion: {
       type: String,
-      default: '4.3',
+      default: '10.13.0',
     },
     caching: {
       type: String,
