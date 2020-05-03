@@ -87,7 +87,7 @@ module.exports = {
       var version =
         config.runtime === 'custom' ? config.customVersion : config.runtime;
 
-      ret.environment = 'n ' + (config.fork === 'io.js' ? 'io ' : '') + version;
+      ret.environment = 'n ' + version;
     }
 
     cb(null, ret);

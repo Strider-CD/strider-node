@@ -4,42 +4,18 @@
 </h2>
 
 <div class="form-group">
-  <label class="bold-label">Node Fork</label>
-  <div class="btn-group">
-    <div
-      class="btn"
-      ng-model="config.fork"
-      ng-change="save()"
-      btn-radio="'Node.js'"
-      ng-class="{ active: config.fork === 'Node.js' }"
-    >
-      Node.js
-    </div>
-    <div
-      class="btn"
-      ng-model="config.fork"
-      ng-change="save()"
-      btn-radio="'io.js'"
-    >
-      io.js
-    </div>
-  </div>
-  <p class="help-text">
-    All forks will expose the `node` command line binary.
-  </p>
-
-  <label for="node-version" class="bold-label">Fork Version</label>
+  <label for="node-version" class="bold-label">Node Version</label>
   <select
     id="node-version"
     ng-change="save()"
     ng-model="config.runtime"
-    placeholder="Node Version"
-    ng-options="value for value in forkVersions"
+    placeholder="Node version"
+    ng-options="value for value in nodeVersions"
   >
   </select>
   <p class="help-text">
-    Select <em>whatever</em> if you want to just use whatever version of the
-    fork is on your machine.
+    Select <em>whatever</em> if you want to just use whatever version of Node
+    that is on your machine.
   </p>
 
   <div ng-if="config.runtime === 'custom'">
@@ -52,7 +28,7 @@
     <p class="help-test">
       Input a custom version, based on the allowed input for
       <a href="https://github.com/tj/n#usage" target="_blank">n ___</a>. Valid
-      input includes '4.3' or '5.1.1' (without the quotes).
+      input includes '11', '10.13' or '10.13.1' (without the quotes).
     </p>
   </div>
 

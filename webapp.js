@@ -1,11 +1,6 @@
 module.exports = {
   // an object that defines the schema for configuration
   config: {
-    fork: {
-      type: String,
-      enum: ['io.js', 'Node.js'],
-      default: 'Node.js',
-    },
     runtime: {
       type: String,
       enum: ['14', '12', '10', 'lts', 'stable', 'latest', 'whatever', 'custom'],

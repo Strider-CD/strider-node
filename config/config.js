@@ -2,21 +2,16 @@ app.controller('NodeController', [
   '$scope',
   function ($scope) {
     $scope.nodeVersions = [
-      '0.10',
-      '0.12',
+      '14',
+      '12',
+      '10',
       'lts',
       'stable',
       'latest',
       'whatever',
       'custom',
     ];
-    $scope.ioVersions = ['stable', 'latest', 'whatever'];
     $scope.saving = false;
-
-    $scope.$watch('config.fork', function (fork) {
-      $scope.forkVersions =
-        fork === 'Node.js' ? $scope.nodeVersions : $scope.ioVersions;
-    });
 
     $scope.$watch('configs[branch.name].node.config', function (value) {
       $scope.config = value;
