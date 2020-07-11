@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/Strider-CD/strider-node/compare/v2.0.0...v2.0.1) (2020-07-11)
+
+
+### Bug Fixes
+
+* use strider-colors directly ([8dde917](https://github.com/Strider-CD/strider-node/commit/8dde9171c401cc4d2f6fdae9be430c14d2426e7f))
+
 ## [2.0.0](https://github.com/Strider-CD/strider-node/compare/v0.4.0...v2.0.0) (2020-05-03)
 
 
